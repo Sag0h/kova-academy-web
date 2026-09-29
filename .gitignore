@@ -1,0 +1,24 @@
+# dependencies
+/node_modules
+
+# Next.js
+/.next
+/out
+
+# production
+/build
+
+# local configuration
+.env*
+!.env.example
+
+# logs and editor files
+npm-debug.log*
+.DS_Store
+*.tsbuildinfo
+next-env.d.ts
+
+# generated clients and uploads
+/app/generated
+/public/uploads
+.vercel

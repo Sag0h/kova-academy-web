@@ -1,0 +1,50 @@
+{
+  "name": "kova-acad-turnos",
+  "version": "0.1.0",
+  "private": true,
+  "prisma": {
+    "seed": "node --import tsx prisma/seed.ts"
+  },
+  "scripts": {
+    "dev": "next dev",
+    "build": "prisma generate && node scripts/prepare-prisma-runtime.mjs && next build --webpack",
+    "start": "next start",
+    "lint": "eslint .",
+    "typecheck": "tsc --noEmit",
+    "test": "vitest run",
+    "db:up": "docker compose up -d --wait",
+    "db:down": "docker compose down",
+    "db:generate": "prisma generate && node scripts/prepare-prisma-runtime.mjs",
+    "db:migrate": "prisma migrate dev",
+    "db:deploy": "prisma migrate deploy",
+    "db:seed": "prisma db seed",
+    "db:studio": "prisma studio"
+  },
+  "dependencies": {
+    "@prisma/adapter-pg": "6.12.0",
+    "@prisma/client": "6.12.0",
+    "bcryptjs": "3.0.3",
+    "cloudinary": "2.11.0",
+    "dotenv": "17.2.3",
+    "next": "16.3.6",
+    "next-auth": "5.0.0-beta.32",
+    "pg": "8.16.3",
+    "react": "19.3.0",
+    "react-dom": "19.3.0",
+    "zod": "4.6.5"
+  },
+  "devDependencies": {
+    "@tailwindcss/postcss": "4.3.3",
+    "@types/node": "26.6.3",
+    "@types/pg": "8.15.5",
+    "@types/react": "19.3.0",
+    "@types/react-dom": "19.3.0",
+    "eslint": "9.39.5",
+    "eslint-config-next": "16.3.6",
+    "prisma": "6.12.0",
+    "tailwindcss": "4.3.3",
+    "tsx": "4.20.6",
+    "typescript": "5.9.3",
+    "vitest": "5.0.2"
+  }
+}

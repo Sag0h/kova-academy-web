@@ -1,0 +1,97 @@
+generator client {
+  provider        = "prisma-client"
+  output          = "../app/generated/prisma"
+  previewFeatures = ["queryCompiler", "driverAdapters"]
+}
+
+datasource db {
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
+}
+
+enum TipoPrecio {
+  fijo
+  desde
+  cotizacion
+}
+
+enum EstadoSlot {
+  disponible
+  ocupado
+}
+
+model Servicio {
+  id          String         @id @default(cuid())
+  nombre      String         @db.VarChar(100)
+  descripcion String         @db.VarChar(500)
+  tipoPrecio  TipoPrecio
+  precio      Decimal?       @db.Decimal(12, 2)
+  activo      Boolean        @default(true)
+  orden       Int            @unique @default(0)
+  fotos       ServicioFoto[]
+  slots       Slot[]
+  createdAt   DateTime       @default(now()) @db.Timestamptz(3)
+  updatedAt   DateTime       @updatedAt @db.Timestamptz(3)
+
+  @@index([activo, orden])
+}
+
+model ServicioFoto {
+  id              String   @id @default(cuid())
+  servicioId      String
+  servicio        Servicio @relation(fields: [servicioId], references: [id], onDelete: Cascade)
+  imagenUrl       String
+  imagenPublicId  String?  @db.VarChar(255)
+  orden           Int      @default(0)
+  createdAt       DateTime @default(now()) @db.Timestamptz(3)
+
+  @@index([servicioId, orden])
+}
+
+model Slot {
+  id         String     @id @default(cuid())
+  inicio     DateTime   @db.Timestamptz(3)
+  fin        DateTime   @db.Timestamptz(3)
+  servicioId String?
+  servicio   Servicio?  @relation(fields: [servicioId], references: [id], onDelete: SetNull)
+  estado     EstadoSlot @default(disponible)
+  notas      String?    @db.VarChar(500)
+  createdAt  DateTime   @default(now()) @db.Timestamptz(3)
+  updatedAt  DateTime   @updatedAt @db.Timestamptz(3)
+
+  @@index([estado, inicio])
+  @@index([servicioId])
+}
+
+model Trabajo {
+  id             String   @id @default(cuid())
+  imagenUrl      String
+  imagenPublicId String?  @db.VarChar(255)
+  descripcion    String?  @db.VarChar(200)
+  orden          Int      @default(0)
+  creadoEn       DateTime @default(now()) @db.Timestamptz(3)
+
+  @@index([orden])
+}
+
+model Usuario {
+  id             String   @id @default(cuid())
+  email          String   @unique
+  passwordHash   String
+  nombre         String   @db.VarChar(100)
+  whatsappNumero String   @db.VarChar(20)
+  createdAt      DateTime @default(now()) @db.Timestamptz(3)
+  updatedAt      DateTime @updatedAt @db.Timestamptz(3)
+}
+
+model Configuracion {
+  id                  String   @id @default("singleton")
+  whatsappNumero      String   @db.VarChar(20)
+  tiktokUrl            String?  @db.VarChar(300)
+  nombreNegocio       String   @default("Kova Academy") @db.VarChar(100)
+  descripcion         String?  @db.VarChar(500)
+  heroImagenUrl       String?
+  heroImagenPublicId  String?  @db.VarChar(255)
+  updatedAt           DateTime @updatedAt @db.Timestamptz(3)
+}

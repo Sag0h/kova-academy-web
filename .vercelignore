@@ -1,0 +1,9 @@
+.env
+.env.*
+.git
+.agents
+.aws
+.codex
+node_modules
+.next
+docs
